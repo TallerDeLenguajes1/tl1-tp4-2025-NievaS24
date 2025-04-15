@@ -19,7 +19,7 @@ Nodo* crearListaVacia(){
 
 void crearTarea(Tarea* T, int contador){
     char descripcion[100];
-    printf("\nIngrese una tarea pendiente:");
+    printf("\nIngrese una tarea pendiente: ");
         fflush(stdin);
         gets(descripcion);
         int DescripLong = strlen(descripcion);
@@ -40,6 +40,13 @@ void insertarNodo(Nodo ** start, Nodo* nodo){
     nodo->Siguiente = *start;
     *start = nodo;
 }
+
+void mostrarLista(Nodo * start){
+    while(start){
+        printf("Tarea: %s\n",start->T.Descripcion);
+        start = start->Siguiente;
+    }
+}
 int main() {
     srand(time(NULL));
     char decision;
@@ -52,8 +59,9 @@ int main() {
         Nodo* nuevo = crearNodo(&T);
         insertarNodo(&start, nuevo);
         contador++;
-        printf("\nSi desea ingresar una nueva tarea ingrese [1], caso contrario ingrese cualquier otro numero: ");
+        printf("\nSi desea ingresar una nueva tarea apriete [1], caso contrario apriete cualquier tecla: ");
         scanf("%d", &decision);
     } while(decision == 1);
+    mostrarLista(start);
     return 0;
 }
