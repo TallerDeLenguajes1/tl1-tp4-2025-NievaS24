@@ -10,14 +10,14 @@ typedef struct Tarea{
 }Tarea;
 typedef struct Nodo{
     Tarea T;
-    struct Nodo* Siguiente;
+    struct Nodo *Siguiente;
 }Nodo;
 
-Nodo* crearListaVacia(){
+Nodo *crearListaVacia(){
     return NULL;
 }
 
-void crearTarea(Tarea* T, int contador){
+void crearTarea(Tarea *T, int contador){
     char descripcion[100];
     printf("\nIngrese una tarea pendiente: ");
         fflush(stdin);
@@ -29,39 +29,48 @@ void crearTarea(Tarea* T, int contador){
         T->Duracion = 10 + rand() % 91;
 }
 
-Nodo* crearNodo(Tarea* T){
-    Nodo * nuevo = (Nodo *) malloc(sizeof(Nodo));
+Nodo *crearNodo(Tarea *T){
+    Nodo *nuevo = (Nodo *) malloc(sizeof(Nodo));
     nuevo->T = *T;
     nuevo->Siguiente = NULL;
     return nuevo;
 }
 
-void insertarNodo(Nodo ** start, Nodo* nodo){
+void insertarNodo(Nodo **start, Nodo *nodo){
     nodo->Siguiente = *start;
     *start = nodo;
 }
 
-void mostrarLista(Nodo * start){
+void mostrarLista(Nodo *start){
     while(start){
         printf("Tarea: %s\n",start->T.Descripcion);
         start = start->Siguiente;
     }
 }
+
 int main() {
     srand(time(NULL));
     char decision;
     int contador = 1000;
-    Nodo* start;
+    Nodo *startPendiente, *startRealizadas;
     Tarea T;
-    start = crearListaVacia();
+    startPendiente = crearListaVacia();
     do {
         crearTarea(&T,contador);
-        Nodo* nuevo = crearNodo(&T);
-        insertarNodo(&start, nuevo);
+        Nodo *nuevo = crearNodo(&T);
+        insertarNodo(&startPendiente, nuevo);
         contador++;
-        printf("\nSi desea ingresar una nueva tarea apriete [1], caso contrario apriete cualquier tecla: ");
+        printf("\nPara continuar oprima [1]. Para finalizar oprima [0]\n");
         scanf("%d", &decision);
     } while(decision == 1);
-    mostrarLista(start);
+    mostrarLista(startPendiente);
+    printf("Ingrese [1] si desea marcar una tarea como realizada.\n");
+    scanf("%d", &decision);
+    while (decision == 1) {
+        printf("Ingrese el indice de la tarea que quieres marcar:\n");
+        mostrarLista(startPendiente);
+        printf("Ingrese [1] si desea marcar una tarea como realizada.\n");
+        scanf("%d", &decision);
+    }
     return 0;
 }
