@@ -29,8 +29,16 @@ void crearTarea(Tarea* T, int contador){
         T->Duracion = 10 + rand() % 91;
 }
 
-Nodo* crearNodo(Nodo* start, Tarea* T){
+Nodo* crearNodo(Tarea* T){
+    Nodo * nuevo = (Nodo *) malloc(sizeof(Nodo));
+    nuevo->T = *T;
+    nuevo->Siguiente = NULL;
+    return nuevo;
+}
 
+void insertarNodo(Nodo ** start, Nodo* nodo){
+    nodo->Siguiente = *start;
+    *start = nodo;
 }
 int main() {
     srand(time(NULL));
@@ -41,12 +49,11 @@ int main() {
     start = crearListaVacia();
     do {
         crearTarea(&T,contador);
+        Nodo* nuevo = crearNodo(&T);
+        insertarNodo(&start, nuevo);
+        contador++;
         printf("\nSi desea ingresar una nueva tarea ingrese [1], caso contrario ingrese cualquier otro numero: ");
         scanf("%d", &decision);
-        contador++;
-        // printf("Descripcion: %s\n", T.Descripcion);
-        // printf("Id: %d\n", T.TareaID);
-        // printf("Duracion %d min\n", T.Duracion);
     } while(decision == 1);
     return 0;
 }
