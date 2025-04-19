@@ -72,6 +72,30 @@ void eliminarNodo(Nodo **start, int indice) {
     }
 }
 
+void moverNodo(Nodo **from, Nodo **to, int indice){
+    Nodo *aux = *from;
+    if (indice == 1) {
+        *from = (*from)->Siguiente;
+        aux->Siguiente = *to;
+        *to = aux;
+    } else {
+        Nodo *previo;
+        for (int i = 1; i < indice; i++) {
+            if (aux != NULL) {
+                previo = aux;
+                aux = aux->Siguiente;
+            }
+        }
+        if (aux != NULL) {
+            previo->Siguiente = aux->Siguiente;
+            aux->Siguiente = *to;
+            *to = aux;
+        } else {
+            printf("El nodo seleccionado no existe\n");
+        }
+    }
+}
+
 int main() {
     srand(time(NULL));
     char decision;
@@ -87,17 +111,23 @@ int main() {
         printf("\nPara continuar oprima [1]. Para finalizar oprima [0]\n");
         scanf("%d", &decision);
     } while (decision == 1);
+    printf("Tareas Pendientes\n");
     mostrarLista(startPendiente);
     int indice;
     printf("Ingrese [1] si desea marcar una tarea como realizada.\n");
     scanf("%d", &decision);
+    startRealizadas = crearListaVacia();
     while (decision == 1) {
         do {
             printf("Ingrese el indice de la tarea que quieres marcar:\n");
             scanf("%d", &indice);
         } while (indice <= 0);
-        eliminarNodo(&startPendiente, indice);
+        //eliminarNodo(&startPendiente, indice);
+        moverNodo(&startPendiente,&startRealizadas,indice);
+        printf("Tareas Pendientes\n");
         mostrarLista(startPendiente);
+        printf("Tareas Realizadas\n");
+        mostrarLista(startRealizadas);
         printf("Ingrese [1] si desea marcar una tarea como realizada.\n");
         scanf("%d", &decision);
     }
