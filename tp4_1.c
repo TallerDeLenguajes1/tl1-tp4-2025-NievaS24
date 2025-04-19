@@ -96,12 +96,38 @@ void moverNodo(Nodo **from, Nodo **to, int indice){
     }
 }
 
+// char *BuscarNombrePorPalabra(char *palabra, char *start) {
+//     char *nombreEncontrado;
+//     for (int i = 0; i < 5; i++) {
+//         nombreEncontrado = strstr(*(V + i), palabra);
+//         if (nombreEncontrado != NULL) return nombreEncontrado;
+//     }
+//     return nombreEncontrado;
+// }
+
+char *buscarTareaID(int num, Nodo *start) {
+    if (num < 1000) {
+        return NULL;
+    }
+    while (start != NULL){
+        if(start->T.TareaID == num){
+            char *TareaBuscada = (char *)malloc((sizeof(char)) * (strlen(start->T.Descripcion)));
+            strcpy(TareaBuscada,start->T.Descripcion);
+            return TareaBuscada;
+        }
+        start = start->Siguiente;
+    }
+    
+
+}
+
 int main() {
     srand(time(NULL));
     char decision;
     int contador = 1000;
     Nodo *startPendiente, *startRealizadas;
     Tarea T;
+    // Ingresar nuevas tareas
     startPendiente = crearListaVacia();
     do {
         crearTarea(&T, contador);
@@ -109,9 +135,10 @@ int main() {
         insertarNodo(&startPendiente, nuevo);
         contador++;
         printf("\nPara continuar oprima [1]. Para finalizar oprima [0]\n");
-        scanf("%d", &decision);
+        scanf(" %d", &decision);
     } while (decision == 1);
     printf("Tareas Pendientes\n");
+    // Marcar tarea como realizada
     mostrarLista(startPendiente);
     int indice;
     printf("Ingrese [1] si desea marcar una tarea como realizada.\n");
@@ -120,7 +147,7 @@ int main() {
     while (decision == 1) {
         do {
             printf("Ingrese el indice de la tarea que quieres marcar:\n");
-            scanf("%d", &indice);
+            scanf(" %d", &indice);
         } while (indice <= 0);
         //eliminarNodo(&startPendiente, indice);
         moverNodo(&startPendiente,&startRealizadas,indice);
@@ -129,7 +156,31 @@ int main() {
         printf("Tareas Realizadas\n");
         mostrarLista(startRealizadas);
         printf("Ingrese [1] si desea marcar una tarea como realizada.\n");
-        scanf("%d", &decision);
+        scanf(" %d", &decision);
+    }
+    // Buscar por ID o por nombre
+    printf("Desea Buscar por Nombre[1] o por ID [2]. Para Salir oprima [0]\n");
+    scanf(" %d", &decision);
+    while (decision == 1 || decision == 2){
+        if (decision == 1){
+
+        } else {
+            printf("Ingrese el indice del nombre que quiere ver: \n");
+            scanf("%d", &indice);
+            char *tareBuscadoPorID = buscarTareaID(indice, startPendiente);
+            if (tareBuscadoPorID == NULL) {
+                tareBuscadoPorID = buscarTareaID(indice, startRealizadas);
+                if (tareBuscadoPorID == NULL){
+                    printf("No existe ese indice\n");
+                }else {
+                    printf("La tarea buscada es: %s y es una tarea Realizada\n", tareBuscadoPorID);
+                }
+            } else {
+                printf("La tarea buscada es: %s y es una tarea Pendiente\n", tareBuscadoPorID);
+            }
+        }
+        printf("Desea Buscar por Nombre[1] o por ID [2]. Para Salir oprima [0]\n");
+        scanf(" %d", &decision);
     }
     return 0;
 }
